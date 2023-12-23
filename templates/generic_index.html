@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack Control</title>
+
+    <!-- Add a reference to a CSS library for toast notifications -->
+    <link rel="stylesheet" href="https://unpkg.com/toastify-js/src/toastify.min.css">
+</head>
+<body>
+
+{% for stack in stacks %}
+    <div>
+        <h3>{{ stack }}</h3>
+        <form action="/start/{{ stack }}" method="post" onsubmit="return handleFormSubmit(this)">
+            <button type="submit">Start {{ stack }}</button>
+        </form>
+        <form action="/stop/{{ stack }}" method="post" onsubmit="return handleFormSubmit(this)">
+            <button type="submit">Stop {{ stack }}</button>
+        </form>
+    </div>
+{% endfor %}
+
+<!-- Add a reference to a JavaScript library for toast notifications -->
+<script src="https://unpkg.com/toastify-js"></script>
+
+<!-- Add custom JavaScript code for handling form submissions and displaying notifications -->
+<script>
+    function handleFormSubmit(form) {
+        var action = form.action;
+        var method = form.method;
+        
+        fetch(action, { method: method })
+            .then(response => response.text())
+            .then(message => {
+                showToast(message);
+            });
+
+        return false;  // Prevent the form from submitting normally
+    }
+
+    function showToast(message) {
+        Toastify({
+            text: message,
+            duration: -1,  // Don't auto-dismiss
+            close: true,   // Allow user to close
+            gravity: "bottom",  // Display at the bottom
+            position: 'right',  // Display on the right
+            backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",  // Customize background color
+        }).showToast();
+    }
+</script>
+
+</body>
+</html>
